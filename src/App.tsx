@@ -3,14 +3,20 @@ import * as THREE from 'three'
 import React, { useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 
+
+
 function Box(props: JSX.IntrinsicElements['mesh']) {
   // This reference will give us direct access to the mesh
-  const mesh = useRef<THREE.Mesh>(null!)
+  const mesh = useRef<THREE.Mesh>(null || new THREE.Mesh())
+  // useEffect(() => {
+  //   console.log(mesh.current);
+  // }, [mesh]);
+
   // Set up state for the hovered and active state
   const [hovered, setHover] = useState(false)
   const [active, setActive] = useState(false)
   // Rotate mesh every frame, this is outside of React without overhead
-  useFrame((state, delta) => (mesh.current.rotation.x += 0.01))
+  useFrame((state, delta) => (mesh.current.rotation.x += 0.01)) 
 
   return (
     <mesh
