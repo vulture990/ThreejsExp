@@ -1,25 +1,25 @@
+/* eslint-disable */
+import * as THREE from 'three'
 import React, { useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 
-function Box(props) {
+function Box(props: JSX.IntrinsicElements['mesh']) {
   // This reference will give us direct access to the mesh
-  const ref = useRef()
+  const mesh = useRef<THREE.Mesh>(null!)
   // Set up state for the hovered and active state
   const [hovered, setHover] = useState(false)
   const [active, setActive] = useState(false)
   // Rotate mesh every frame, this is outside of React without overhead
-  useFrame(() => {
-    (ref.current.rotation.y += 0.009)
-    ref.current.rotation.x +=0.001 
-  })
+  useFrame((state, delta) => (mesh.current.rotation.x += 0.01))
+
   return (
     <mesh
       {...props}
-      ref={ref}
+      ref={mesh}
       scale={active ? 1.5 : 1}
-      onClick={(e) => setActive(!active)}
-      onPointerOver={(e) => setHover(true)}
-      onPointerOut={(e) => setHover(false)}>
+      onClick={(event) => setActive(!active)}
+      onPointerOver={(event) => setHover(true)}
+      onPointerOut={(event) => setHover(false)}>
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
     </mesh>
@@ -29,9 +29,8 @@ function Box(props) {
 export default function App() {
   return (
     <Canvas>
-      <ambientLight intensity={0.5} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-      <pointLight position={[-10, -10, -10]} />
+      <ambientLight />
+      <pointLight position={[10, 10, 10]} />
       <Box position={[-1.2, 0, 0]} />
       <Box position={[1.2, 0, 0]} />
     </Canvas>
